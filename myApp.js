@@ -1,8 +1,16 @@
+const bodyParser = require('body-parser');
 const { json } = require('body-parser');
 let express = require('express');
-let app = express();
+const { log } = require('fcc-express-bground');
+var app = express();
 
 require('dotenv').config();
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({extended: false}));
+
+// parse application/json
+app.use(bodyParser.json());
 
 console.log("Hello World");
 
@@ -19,6 +27,8 @@ app.use("/public", express.static(__dirname + "/public"));
 app.use(function (req, res, next) {
     console.log(`${req.method} ${req.path} - ${req.ip}`);
     next();
+
+    app.use(bodyParser.json());
 })
 
 app.get("/json", (req, res) => {
@@ -42,8 +52,6 @@ app.get("/now", function(req, res, next){
     res.json({time: req.time });
 });
 
-console.log(process.env.PASSWORD) 
-
 
 app.get("/now", function(req, res, next){
     next();
@@ -58,15 +66,11 @@ app.get("/:word/echo", function(req, res) {
 })
 
 app.get("/name", (req, res)=>{
-   const {a, b, c, d, e, f} = req.query;
-    return res.json({statement: a + " " + b + " " + c + " " + d + " " + e + " " + f})
+   const {first, last} = req.query;
+    return res.json({statement: first + " " + last})
 })
 
-app.get("/name", (req, res) => {
-   const { a, b, c, d, e, f } = req.query;
-   const statementArray = [a, b, c, d, e, f].filter(Boolean); // Removes undefined values
-   return res.json({ statement: statementArray.join(" ") }); // Joins only available values
-});
+
 
 
 
