@@ -57,6 +57,17 @@ app.get("/:word/echo", function(req, res) {
     
 })
 
+app.get("/name", (req, res)=>{
+   const {a, b, c, d, e, f} = req.query;
+    return res.json({statement: a + " " + b + " " + c + " " + d + " " + e + " " + f})
+})
+
+app.get("/name", (req, res) => {
+   const { a, b, c, d, e, f } = req.query;
+   const statementArray = [a, b, c, d, e, f].filter(Boolean); // Removes undefined values
+   return res.json({ statement: statementArray.join(" ") }); // Joins only available values
+});
+
 
 
 
